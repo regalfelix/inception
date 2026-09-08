@@ -1,2 +1,3 @@
 # inception
-docker project for 42
+
+This project is license under the [MIT License](LICENSE)
