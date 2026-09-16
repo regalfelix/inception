@@ -4,3 +4,8 @@ sudo systemctl status nginx
 cat /var/www/html/index.nginx-debian.html -> this is the html that nginx show when you do https://localhost
 cat /etc/nginx/sites-available/default -> sites-available just has all the different configs that ur nginx can have basically 
 	- essentially you just need to edit the default file to have the config you want to set it up for inception
+https://cert-depot.com/guides/self-signed-cert-nginx -> for the certificate/key so your website uses https (with the lock up top); these are in secrets/nginx
+
+the port (443) is opened through docker compose but its the same as doing docker run -p 443:443
+
+once files are copied (config and keys) just run as main process and its done

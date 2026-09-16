@@ -1,0 +1,11 @@
+services:
+  nginx:
+    build: requirements/nginx
+    ports:
+      - "443:443"
+
+secrets:
+  ssl_certificate:
+    file: secrets/certificate.pem
+  ssl_private-key:
+    file: secrets/private-key.pem
