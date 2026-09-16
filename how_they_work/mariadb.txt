@@ -1,0 +1,3 @@
+how mariadb setup works:
+
+basically call the entrypoint.sh (just a bash script) through the Dockerfile

@@ -1,4 +1,4 @@
-FROM debian:oldstable-slim
+FROM debian:12.15
 
 RUN apt-get -y update
 RUN apt-get -y install nginx
