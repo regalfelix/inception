@@ -1,4 +1,6 @@
 FROM debian:12.15
 
-RUN sudo apt-get update
-RUN sudo apt-get -y install mariadb-server
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends mariadb-server mariadb-client && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*

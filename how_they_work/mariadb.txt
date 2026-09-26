@@ -1,3 +1,16 @@
 how mariadb setup works:
 
+RUN echo "[mysqld]\nbind-address = 0.0.0.0" > /etc/mysql/mariadb.conf.d/50-server.cnf -> bind address to 0.0.0.0 overwrite the mariadb default which is just localhost
 basically call the entrypoint.sh (just a bash script) through the Dockerfile
+
+entrypoint contents:
+sudo -u mysql /usr/bin/mariadb-safe (this is for running mariadb as a primary process. sudo -u means for user mysql)
+
+sudo mariadb-install-db -u root --datadir=/var/lib/mysql to install the database
+
+then we need to check if mariadb is running 
+mariadbd-safe
+sudo mariadb -NBe "SELECT VERSION();" -> to check if it is running, can put in a loop in entrypoint to confirm it works
+
+execute commands in mariadb with
+mariadb -u(ser) <user> -e(xecute) <command>
