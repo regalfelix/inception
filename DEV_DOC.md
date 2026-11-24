@@ -7,7 +7,7 @@
 - Add `127.0.0.1 frey-gal.42.fr` to `/etc/hosts`.
 - `srcs/.env` holds `LOGIN`, `DOMAIN_NAME` and `MYSQL_DATABASE`. Edit it if your
   login is not `frey-gal`.
-- Create the secrets (not in git; `secrets/` must be in `.gitignore`):
+- Create the secrets (not in git; `secrets/`):
 
 ```
 mkdir -p secrets/mariadb secrets/nginx secrets/wordpress
