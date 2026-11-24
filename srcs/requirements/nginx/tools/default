@@ -1,0 +1,22 @@
+server {
+	listen 443 ssl default_server;
+	listen [::]:443 ssl default_server;
+
+	server_name frey-gal.42.fr;
+
+	ssl_protocols TLSv1.3;
+	ssl_certificate /run/secrets/ssl_certificate;
+	ssl_certificate_key /run/secrets/ssl_private-key;
+
+	root /var/www/html;
+	index index.php index.html;
+
+	location / {
+		try_files $uri $uri/ /index.php?$args;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass wordpress:9000;
+	}
+}

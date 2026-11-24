@@ -1,0 +1,104 @@
+services:
+  nginx:
+    build: requirements/nginx
+    image: nginx:1.0
+    container_name: nginx
+    env_file: .env
+    ports:
+      - "443:443"
+    secrets:
+      - ssl_certificate
+      - ssl_private-key
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+
+  wordpress:
+    build: requirements/wordpress
+    image: wordpress:1.0
+    container_name: wordpress
+    env_file: .env
+    secrets:
+      - mysql_user
+      - mysql_pass
+      - wp_admin
+      - wp_admin_pass
+      - wp_admin_email
+      - wp_user
+      - wp_user_pass
+      - wp_user_email
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mariadb:
+    build: requirements/mariadb
+    image: mariadb:1.0
+    container_name: mariadb
+    env_file: .env
+    secrets:
+      - mysql_user
+      - mysql_pass
+      - mysql_root_pass
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "--silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${LOGIN}/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${LOGIN}/data/wordpress
+
+networks:
+  inception:
+    driver: bridge
+
+secrets:
+  ssl_certificate:
+    file: ../secrets/nginx/certificate.pem
+  ssl_private-key:
+    file: ../secrets/nginx/private-key.pem
+  mysql_user:
+    file: ../secrets/mariadb/mysql_user
+  mysql_pass:
+    file: ../secrets/mariadb/mysql_pass
+  mysql_root_pass:
+    file: ../secrets/mariadb/mysql_root_pass
+  wp_admin:
+    file: ../secrets/wordpress/wp_admin
+  wp_admin_pass:
+    file: ../secrets/wordpress/wp_admin_pass
+  wp_admin_email:
+    file: ../secrets/wordpress/wp_admin_email
+  wp_user:
+    file: ../secrets/wordpress/wp_user
+  wp_user_pass:
+    file: ../secrets/wordpress/wp_user_pass
+  wp_user_email:
+    file: ../secrets/wordpress/wp_user_email
