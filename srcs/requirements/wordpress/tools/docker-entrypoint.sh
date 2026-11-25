@@ -42,6 +42,9 @@ if [ ! -f "/var/www/html/init" ]; then
 		--dbhost=mariadb \
 		--force
 
+	sudo -E -u www-data wp config set WP_HOME "isset(\$_SERVER['HTTP_HOST']) ? 'https://' . \$_SERVER['HTTP_HOST'] : 'https://${DOMAIN_NAME}'" --raw
+	sudo -E -u www-data wp config set WP_SITEURL "isset(\$_SERVER['HTTP_HOST']) ? 'https://' . \$_SERVER['HTTP_HOST'] : 'https://${DOMAIN_NAME}'" --raw
+
 	# initialize webpage and stuff
 	sudo -E -u www-data wp core is-installed || \
 	sudo -E -u www-data wp core install \
